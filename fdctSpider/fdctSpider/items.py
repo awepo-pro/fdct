@@ -11,3 +11,14 @@ class FundItem(scrapy.Item):
     title = scrapy.Field()
     article = scrapy.Field()
     date = scrapy.Field()
+    lang = scrapy.Field()
+
+class BulletinItem(scrapy.Item):
+    url = scrapy.Field()
+    title = scrapy.Field()
+    article = scrapy.Field()
+    lang = scrapy.Field()
+
+class ImageItem(scrapy.Item):
+    path = scrapy.Field()
+    name = scrapy.Field()
