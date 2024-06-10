@@ -163,3 +163,6 @@ cython_debug/
 
 # mac
 *.DS_Store
+
+# orginal images folders, size is too large
+fdctSpider/fdctSpider/spiders/images/
