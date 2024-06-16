@@ -3,7 +3,7 @@
 This project aims to fetch useful information from [website](https://www.fdct.gov.mo/zh_tw/index.html)
 
 # run
-before start running, the program install the packages by
+before start running, install the required packages by
 
 ```shell
 pip install -r requirement.txt
@@ -34,4 +34,4 @@ python main.py --qa
 ```
 
 ## NOTE
-[this website](https://www.fdct.gov.mo/zh_tw/research_funding1.html) doesn't finish reformat into Q&A. Therefore, there is only 1 webpage suit for this format
+it is disable to reformat this [this website](https://www.fdct.gov.mo/zh_tw/research_funding1.html) into Q&A structure. Therefore, there is only 1 webpage suit for this format
