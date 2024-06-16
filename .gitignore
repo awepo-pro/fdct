@@ -164,8 +164,14 @@ cython_debug/
 # mac
 *.DS_Store
 
-# orginal images folders, size is too large
+# orginal images folders, size is too large	
 fdctSpider/fdctSpider/spiders/images/
 
 # self define
 difficulties.txt
+.vscode/
+fdctSpider/log/
+fdctSpider/info/
+fdctSpider/download/
+fdctSpider/images/
+fdctSpider/download/

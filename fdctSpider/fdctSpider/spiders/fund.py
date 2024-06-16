@@ -1,10 +1,7 @@
 import scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import Rule, CrawlSpider
-from fdctSpider.items import FundItem
-
-# from scrapy_selenium import SeleniumRequest
-
+from ..items import FundItem
 
 class fundPySpider(CrawlSpider):
     name = "fund.py"
@@ -20,7 +17,7 @@ class fundPySpider(CrawlSpider):
 
     # def start_requests(self):
     #     start_urls = ['https://www.fdct.gov.mo/zh_tw/fund_information_detail/article/lvm7ejtv.html']
-        # yield [scrapy.Request(url=url, callback=self.parse_item) for url in start_urls]
+        # return [scrapy.Request(url=url, callback=self.parse_item) for url in start_urls]
 
     def __extract_article(self, container):
         return container.xpath('//div[@class="details_body"]/descendant-or-self::*/text()').extract()
@@ -38,27 +35,3 @@ class fundPySpider(CrawlSpider):
         fund['date'] = container.xpath('//div[1]/span[2]/text()').extract()
 
         yield fund
-
-# class ScrapingClubSpider(scrapy.Spider):
-#     name = 'scraping_club'
-
-#     def start_requests(self):
-#         url = "https://scrapingclub.com/exercise/list_infinite_scroll/"
-#         yield SeleniumRequest(url=url, callback=self.parse)
-
-#     def parse(self, response):
-#         # select all product elements and iterate over them
-#         for product in response.css(".post"):
-#             # scrape the desired data from each product
-#             url = product.css("a").attrib["href"]
-#             image = product.css(".card-img-top").attrib["src"]
-#             name = product.css("h4 a::text").get()
-#             price = product.css("h5::text").get()
-    
-#             # add the data to the list of scraped items
-#             yield {
-#                 "url": url,
-#                 "image": image,
-#                 "name": name,
-#                 "price": price
-#             }

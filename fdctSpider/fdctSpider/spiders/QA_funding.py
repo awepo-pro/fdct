@@ -1,11 +1,7 @@
 # import scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import Rule, CrawlSpider
-from fdctSpider.items import QAFundingItem
-# import json
-
-def dbg_out(*args):
-    print('-'*20, args, '-'*20)
+from ..items import QAFundingItem
 
 class qa_format:
     def __init__(self, question, answer):
@@ -29,7 +25,7 @@ class BulletinPySpider(CrawlSpider):
         qa['url'] = response.url
         qa['title'] = response.css('.content-title ::text').extract()
 
-        qa['question'] = response.xpath('//div[@class="content-body"]/span[@class="qa_question"]/text()').extract()
-        qa['answer'] = response.xpath('//div[@class="content-body"]/span[@class="qa_answer"]/text()').extract()
+        qa['question'] = response.xpath('//div[@class="content-body"]//span[@class="qa_question"]/text()').extract()
+        qa['answer'] = response.xpath('//div[@class="content-body"]//span[@class="qa_answer"]/text()').extract()
 
         yield qa

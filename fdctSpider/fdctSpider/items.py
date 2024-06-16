@@ -23,7 +23,11 @@ class BulletinItem(scrapy.Item):
 
 class ImageItem(scrapy.Item):
     path = scrapy.Field()
-    name = scrapy.Field()
+    
+
+class DownloadItem(scrapy.Item):
+    path = scrapy.Field()
+
 
 class QAAwardItem(scrapy.Item):
     url = scrapy.Field()
@@ -42,3 +46,10 @@ class QAFundingItem(scrapy.Item):
     answer = scrapy.Field()
     title = scrapy.Field()
     lang = scrapy.Field()
+
+
+class ContactItem(scrapy.Item):
+    url = scrapy.Field()
+    article = scrapy.Field()
+    lang = scrapy.Field()
+    title = scrapy.Field()

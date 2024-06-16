@@ -11,7 +11,6 @@ BOT_NAME = "fdctSpider"
 
 SPIDER_MODULES = ["fdctSpider.spiders"]
 NEWSPIDER_MODULE = "fdctSpider.spiders"
-# SELENIUM_DRIVER_ARGUMENTS = ["--headless=new"] 
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -52,8 +51,7 @@ ROBOTSTXT_OBEY = True
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 # DOWNLOADER_MIDDLEWARES = {
-#    "scrapy_selenium.SeleniumMiddleware": 800,
-#    # "fdctSpider.middlewares.FdctspiderDownloaderMiddleware": 543,
+#    "fdctSpider.middlewares.FdctspiderDownloaderMiddleware": 543,
 # }
 
 # Enable or disable extensions

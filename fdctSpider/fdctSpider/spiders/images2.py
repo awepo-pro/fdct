@@ -9,17 +9,10 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 class ImagesPySpider(CrawlSpider):
     name = "images.py"
-    allowed_domains = ["www.fdct.gov.mo"]
 
-    start_urls = ["https://www.fdct.gov.mo/images"]
-
-    dir_pattern = r'.*/$'
-    
-    rules = [
-        Rule(LinkExtractor(allow=dir_pattern), callback='parse_item') # fetch all directories instead of files
-    ]
-
-    downloadPath = os.getcwd() + 'images'
+    def start_requests(self):
+        start_urls = ["https://www.fdct.gov.mo/images"]
+        return [scrapy.Request(url=url, callback=self.parse_item) for url in start_urls]
 
     # add this in pipelines.py in refactoring
     # remove all folder' paths 

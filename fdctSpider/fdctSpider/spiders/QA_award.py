@@ -4,9 +4,6 @@ from scrapy.spiders import Rule, CrawlSpider
 from fdctSpider.items import QAAwardItem
 # import json
 
-def dbg_out(*args):
-    print('-'*20, args, '-'*20)
-
 class qa_format:
     def __init__(self, question, answer):
         self.question = question
