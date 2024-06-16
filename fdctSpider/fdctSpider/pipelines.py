@@ -7,7 +7,7 @@
 # useful for handling different item types with a single interface
 # from itemadapter import ItemAdapter
 from string import whitespace
-from fdctSpider.items import FundItem, BulletinItem, ImageItem
+from .items import FundItem, BulletinItem, ImageItem, QAAwardItem, QAFundingItem
 import os
 from urllib.request import urlretrieve
 
@@ -15,16 +15,28 @@ class FdctspiderPipeline:
     def __init__(self):
         self.download_path = os.getcwd() + '/images/'
 
-    def __remove_whitespace(self, str):
-        for punc in whitespace:
-            if punc == ' ':
-                continue
-            str = str.replace(punc, '')
+    @staticmethod
+    def __is_empty(str):
+        if all(ch in ['\xa0', ' '] for ch in str):
+            return True
+        return False
 
-        # extra process
-        str = str.replace(u'\xa0', u'')
+    @staticmethod
+    def __remove_whitespace(strs):
+        ret = []
 
-        return str
+        for str in strs:
+            str = str.replace(u'\xa0', u'')
+
+            for punc in whitespace:
+                if punc == ' ':
+                    continue
+                str = str.replace(punc, '').strip()
+
+            if str:
+                ret.append(str)
+
+        return ret
 
     def __download_path(self, paths):
         paths = self.download_path + paths[25:]
@@ -35,23 +47,72 @@ class FdctspiderPipeline:
 
         return paths
 
+    @staticmethod
+    def __extract_lang(url):
+        ret = ''
+
+        if r'/zh_tw/' in url:
+            ret = 'zh'
+        elif r'/pt/' in url:
+            ret = 'pt'
+        else:
+            ret = 'en'
+
+        return ret
+
+    @staticmethod
+    def __extract_title(content):
+        content = content[0].strip()
+
+        if not content:
+            return content[0]
+        return content
+
+    @staticmethod
+    def __extract_answer(contents):
+        ret = []
+        for content in contents:
+            # if using r'\n', it means check a string '\n' instead of escape character
+            if '\n' in content:
+                ret[-1] = ret[-1] + content[2:]
+            else:
+                ret.append(content)
+
+        return ret
+
+    @staticmethod
+    def __QA_format(question, answer):
+        arr = []
+        for q, a in zip(question, answer):
+            arr.append({'Q':q, 'A':a})
+
+        return arr
+
     def process_item(self, item, spider):
         if isinstance(item, FundItem):
             fund = item
-            if fund['article'] is not None:
-                fund['article'] = ''.join(fund['article'])
-                fund['article'] = self.__remove_whitespace(fund['article'])
+
+            # if debug, comment it out
+            if FdctspiderPipeline.__is_empty([str for str in fund['article']]):
+                return None
+
+            fund['article'] = FdctspiderPipeline.__remove_whitespace([str for str in fund['article']])
 
             fund['title'] = fund['title'].strip() if fund['title'] is not None else ''
+            fund['lang'] = FdctspiderPipeline.__extract_lang(fund['url'])
 
             return fund
 
         elif isinstance(item, BulletinItem):
             bulletin = item
 
-            bulletin['article'] = ''.join(bulletin['article'])
-            bulletin['article'] = self.__remove_whitespace(bulletin['article'])
-            bulletin['title'] = bulletin['title'].strip() if bulletin['title'] is not None else ''
+              # if debug, comment it out
+            if FdctspiderPipeline.__is_empty([str for str in bulletin['article']]):
+                return None
+
+            bulletin['article'] = FdctspiderPipeline.__remove_whitespace([str for str in bulletin['article']])
+            bulletin['title'] = FdctspiderPipeline.__extract_title(bulletin['title'])
+            bulletin['lang'] = FdctspiderPipeline.__extract_lang(bulletin['url'])
 
             return bulletin
 
@@ -68,3 +129,15 @@ class FdctspiderPipeline:
             images['name'] = names
 
             return images
+
+        elif isinstance(item, QAAwardItem):
+            qa = item 
+
+            qa['answer'] = FdctspiderPipeline.__extract_answer(qa['answer'])
+            qa['answer'] = FdctspiderPipeline.__remove_whitespace([str for str in qa['answer']])
+            qa['question'] = FdctspiderPipeline.__remove_whitespace([str for str in qa['question']])
+            qa['QA'] = FdctspiderPipeline.__QA_format(qa['question'], qa['answer'])
+            qa['title'] = FdctspiderPipeline.__extract_title(qa['title'])
+            qa['lang'] = FdctspiderPipeline.__extract_lang(qa['url'])
+
+            return qa

@@ -166,3 +166,6 @@ cython_debug/
 
 # orginal images folders, size is too large
 fdctSpider/fdctSpider/spiders/images/
+
+# self define
+difficulties.txt
