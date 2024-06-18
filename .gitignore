@@ -175,3 +175,4 @@ fdctSpider/info/
 fdctSpider/download/
 fdctSpider/images/
 fdctSpider/download/
+_*.py
