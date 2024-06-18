@@ -8,10 +8,8 @@
 # from itemadapter import ItemAdapter
 from string import whitespace
 from .items import BulletinDetailItem, DownloadItem, FundItem, BulletinItem, ImageItem, QAAwardItem, QAFundingItem, DownloadItem, ContactItem, BulletinDetailItem, TransItem, CoopItem, FileItem
-import os
-from urllib.request import urlretrieve
-import re
 from .tool.println import println
+import os
 
 from urllib.parse import unquote
 

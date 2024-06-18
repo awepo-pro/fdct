@@ -4,11 +4,8 @@ from scrapy.spiders import Rule, CrawlSpider
 from ..items import ImageItem
 from ..tool.println import println
 
-import ssl
-ssl._create_default_https_context = ssl._create_unverified_context
-
 class ImagesPySpider(CrawlSpider):
-    name = "images.py"
+    name = "images"
     allowed_domains = ["www.fdct.gov.mo"]
     
     def start_requests(self):

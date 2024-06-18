@@ -4,7 +4,7 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import Rule, CrawlSpider
 
 class ExpertSpider(CrawlSpider):
-    name = "expert_database.py"
+    name = "expert_database"
     allowed_domains = ["fdct.gov.mo"]
     
     def start_requests(self):

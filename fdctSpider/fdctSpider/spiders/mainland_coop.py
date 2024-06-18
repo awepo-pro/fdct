@@ -4,7 +4,7 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import Rule, CrawlSpider
 
 class MainlandCoopSpider(CrawlSpider):
-    name = "mainland_coop.py"
+    name = "mainland_coop"
     allowed_domains = ["fdct.gov.mo"]
     start_urls = ['https://www.fdct.gov.mo/zh_tw/mainland_macau_cooperation_detail/article/', 'https://www.fdct.gov.mo/pt/mainland_macau_cooperation_detail/article/', 'https://www.fdct.gov.mo/en/mainland_macau_cooperation_detail/article/']
     

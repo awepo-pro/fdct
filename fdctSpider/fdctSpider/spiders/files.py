@@ -5,7 +5,7 @@ from ..items import FileItem
 from ..tool.println import println
 
 class ImagesPySpider(CrawlSpider):
-    name = "files.py"
+    name = "files"
     allowed_domains = ["www.fdct.gov.mo"]
 
     def start_requests(self):

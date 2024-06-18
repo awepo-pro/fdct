@@ -5,7 +5,7 @@ from ..items import BulletinDetailItem
 
 
 class BulletinPySpider(CrawlSpider):
-    name = "bulletin_detail.py"
+    name = "bulletin_detail"
     allowed_domains = ["fdct.gov.mo"]
     start_urls = ['https://www.fdct.gov.mo/zh_tw/bulletin_detail/article/', 'https://www.fdct.gov.mo/pt/bulletin_detail/article/', 'https://www.fdct.gov.mo/en/bulletin_detail/article/']
 

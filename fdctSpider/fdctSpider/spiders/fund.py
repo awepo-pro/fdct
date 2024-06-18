@@ -4,7 +4,7 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import Rule, CrawlSpider
 
 class Fund2PySpider(CrawlSpider):
-    name = "fund.py"
+    name = "fund"
     allowed_domains = ["fdct.gov.mo"]
     start_urls = ["https://www.fdct.gov.mo/zh_tw/fund_information_detail/article/"]
     

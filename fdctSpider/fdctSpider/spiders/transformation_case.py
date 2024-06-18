@@ -4,7 +4,7 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import Rule, CrawlSpider
 
 class TransSpider(CrawlSpider):
-    name = "transformation_case.py"
+    name = "transformation_case"
     allowed_domains = ["fdct.gov.mo"]
     start_urls = ['https://www.fdct.gov.mo/zh_tw/transformation_case_detail/article/', 'https://www.fdct.gov.mo/pt/transformation_case_detail/article/', 
                   'https://www.fdct.gov.mo/en/transformation_case_detail/article/']
