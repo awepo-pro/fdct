@@ -1,6 +1,5 @@
 import scrapy
-from scrapy.linkextractors import LinkExtractor
-from scrapy.spiders import Rule, CrawlSpider
+from scrapy.spiders import CrawlSpider
 from ..items import DownloadItem
 from ..tool.println import println
 
@@ -47,9 +46,10 @@ class ImagesPySpider(CrawlSpider):
                       'https://www.fdct.gov.mo/download/technological-awards/country/2019/', 'https://www.fdct.gov.mo/download/technological-awards/country/2020/', 
                       'https://www.fdct.gov.mo/download/technological-awards/country/2023/', 'https://www.fdct.gov.mo/download/technological-awards/country/general/', 
                       'https://www.fdct.gov.mo/download/technological-awards/guanghua/', 'https://www.fdct.gov.mo/download/technological-awards/hlhl/', 'https://www.fdct.gov.mo/download/wind/']        
+
         return [scrapy.Request(url=url, callback=self.parse_item) for url in start_urls]
     
-    def __is_files(self, links, response):
+    def __is_files(self, links: str, response) -> list[str]:
         path = []
         desired_format = ['.jpg', '.jpeg', '.png', '.mp3', '.mp4', '.pdf', '.ppsx', '.webp', '.docx', '.doc', '.ppt']
 

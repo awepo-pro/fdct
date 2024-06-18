@@ -1,7 +1,7 @@
 import scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import Rule, CrawlSpider
-from ..items import FileItem
+from ..items import DownloadItem
 from ..tool.println import println
 
 class ImagesPySpider(CrawlSpider):
@@ -21,7 +21,7 @@ class ImagesPySpider(CrawlSpider):
         return link.endswith('.pdf') or link.endswith('.jpg')
 
     def parse_item(self, response):
-        file = FileItem()
+        file = DownloadItem()
         println(response.url, 'warning')
 
         Links = response.xpath('//table//a//@href').extract()

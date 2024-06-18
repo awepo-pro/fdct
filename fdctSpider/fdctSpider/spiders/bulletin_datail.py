@@ -1,7 +1,6 @@
-import scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import Rule, CrawlSpider
-from ..items import BulletinDetailItem
+from ..items import BulletinItem
 
 
 class BulletinPySpider(CrawlSpider):
@@ -15,13 +14,8 @@ class BulletinPySpider(CrawlSpider):
         Rule(LinkExtractor(allow=page_pattern), callback='parse_item')
     ]
     
-    # def start_requests(self):
-    #     start_urls = ['https://www.fdct.gov.mo/zh_tw/bulletin_detail/article/losnlwjr.html']
-    #     return [scrapy.Request(url=url, callback=self.parse_item) for url in start_urls]
-
-
     def parse_item(self, response):
-        detail = BulletinDetailItem()
+        detail = BulletinItem()
 
         detail['url'] = response.url
         detail['title'] = response.xpath('//div[@section-id="2835"]/div/div[1]//text()').extract()

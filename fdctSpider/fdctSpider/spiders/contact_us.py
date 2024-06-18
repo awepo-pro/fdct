@@ -1,7 +1,7 @@
 import scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import Rule, CrawlSpider
-from ..items import ContactItem
+from ..items import BulletinItem
 
 
 class BulletinPySpider(CrawlSpider):
@@ -16,7 +16,7 @@ class BulletinPySpider(CrawlSpider):
     ]
 
     def parse_item(self, response):
-        contact = ContactItem()
+        contact = BulletinItem()
 
         contact['url'] = response.url
         contact['title'] = response.css('.content div.content-title ::text').extract_first()

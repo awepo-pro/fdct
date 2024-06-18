@@ -9,14 +9,14 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
     
-def println(str, status='ok', replace=''):
+def println(str: str, status='ok', replace=''):
     content = status 
     if replace != '':
         content = replace 
         
     if status == 'ok':
-        print(bcolors.OKGREEN, '[{:^10s}]: '.format(content), str, bcolors.ENDC)
+        print(bcolors.OKGREEN, '[{:^11s}]: '.format(content), str, bcolors.ENDC)
     elif status == 'fail':
-        print(bcolors.FAIL, '[{:^10s}]: '.format(content), str, bcolors.ENDC)
+        print(bcolors.FAIL, '[{:^11s}]: '.format(content), str, bcolors.ENDC)
     elif status == 'warning':
-        print(bcolors.WARNING,'[{:^10s}]: '.format(content), str, bcolors.ENDC)
+        print(bcolors.WARNING,'[{:^11s}]: '.format(content), str, bcolors.ENDC)

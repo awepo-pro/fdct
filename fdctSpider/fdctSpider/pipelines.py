@@ -1,31 +1,24 @@
-# Define your item pipelines here
-#
-# Don't forget to add your pipeline to the ITEM_PIPELINES setting
-# See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-
-
-# useful for handling different item types with a single interface
-# from itemadapter import ItemAdapter
 from string import whitespace
-from .items import BulletinDetailItem, DownloadItem, FundItem, BulletinItem, ImageItem, QAAwardItem, QAFundingItem, DownloadItem, ContactItem, BulletinDetailItem, TransItem, CoopItem, FileItem
 from .tool.println import println
+from urllib.parse import unquote
+from typing import Literal
 import os
 
-from urllib.parse import unquote
-
 class FdctspiderPipeline:
-    def __init__(self):
-        self.image_path = os.getcwd() + '/images/'
-        self.download_path = os.getcwd() + '/download/'
-        self.file_path = os.getcwd() + '/files/'
-        
+    
     @staticmethod
-    def __check_and_remove_whitespace(strs):
+    def __check_and_remove_whitespace(strs: list[str]) -> tuple[list[str], bool]:
+        """
+        check whether the list of strings is empty or not,
+        if it is empty, return the original list of strings and False,
+        otherwise, remove the whitespace and return the new list of strings and True
+        """
+        
         if not strs:
             return strs, False
         
         for str in strs:
-            ret = []
+            ret: list = []
 
             for str in strs:
                 str = str.replace('\xa0', '').replace('\u202d', '').replace('\u202c', '')
@@ -43,38 +36,12 @@ class FdctspiderPipeline:
             
         return ret, True
 
-    def __download_image_path(self, paths):
-        paths = unquote(paths)
-        paths = self.image_path + paths[24:]
-        dir_path = os.path.dirname(paths)
-
-        if not os.path.exists(dir_path):
-            os.makedirs(dir_path)
-
-        return paths
-    
-    def __download_download_path(self, paths):
-        paths = unquote(paths)
-        paths = self.download_path + paths[24:]     # path[24:] remove 'https://www.fdct.gov.mo/'
-        dir_path = os.path.dirname(paths)
-
-        if not os.path.exists(dir_path):
-            os.makedirs(dir_path)
-            
-        return paths
-    
-    def __download_file_path(self, paths):
-        paths = unquote(paths)
-        paths = self.file_path + paths[24:]     # path[24:] remove 'https://www.fdct.gov.mo/'
-        dir_path = os.path.dirname(paths)
-
-        if not os.path.exists(dir_path):
-            os.makedirs(dir_path)
-            
-        return paths
-
     @staticmethod
-    def __extract_lang(url):
+    def __extract_lang(url: str) -> Literal['zh', 'pt', 'en']:
+        """
+        return the language used in the article
+        """
+        
         ret = ''
 
         if r'/zh_tw/' in url:
@@ -87,26 +54,29 @@ class FdctspiderPipeline:
         return ret
 
     @staticmethod
-    def __extract_title(content, replace):
+    def __extract_title(content: str|list[str], replace: str):
+        """
+        if no explicit title is found in the article, 
+        return the first line of the article as the title
+        """
+        
         if isinstance(content, list):
             content = content[0]
         content = content.strip()
 
-        if not content:
-            return replace
-        return content
+        return replace if not content else content
 
-    @staticmethod
-    def __extract_answer(contents):
-        ret = []
-        for content in contents:
-            # if using r'\n', it means check a string '\n' instead of escape character
-            if '\n' in content:
-                ret[-1] = ret[-1] + content[2:]
-            else:
-                ret.append(content)
+    # @staticmethod
+    # def __extract_answer(contents):
+    #     ret = []
+    #     for content in contents:
+    #         # if using r'\n', it means check a string '\n' instead of escape character
+    #         if '\n' in content:
+    #             ret[-1] = ret[-1] + content[2:]
+    #         else:
+    #             ret.append(content)
 
-        return ret
+    #     return ret
     
     # @staticmethod
     # def __extract_answer2(contents):
@@ -120,115 +90,36 @@ class FdctspiderPipeline:
             
         # return ret
 
-    @staticmethod
-    def __QA_format(prizes, question, answer):
-        arr = []
-        tmp = []
-        cnt = 0
+    # @staticmethod
+    # def __QA_format(prizes, question, answer):
+    #     arr = []
+    #     tmp = []
+    #     cnt = 0
         
-        for q, a in zip(question, answer):
+    #     for q, a in zip(question, answer):
             
-            if q.startswith('1.'):
-                if cnt != 0:
-                    arr.append({'prize': prizes[cnt], 'QA':tmp})
-                    tmp = []
-                cnt += 1
+    #         if q.startswith('1.'):
+    #             if cnt != 0:
+    #                 arr.append({'prize': prizes[cnt], 'QA':tmp})
+    #                 tmp = []
+    #             cnt += 1
                 
-            tmp.append({'Q':q, 'A':a})
+    #         tmp.append({'Q':q, 'A':a})
         
-        arr.append({'prize': prizes[-1], 'QA':tmp})
+    #     arr.append({'prize': prizes[-1], 'QA':tmp})
         
-        return arr
-    
-    @staticmethod
-    def __remove_wrong_path(path):
-        ok = True 
-        if 'index.html' in path:
-            ok = False
-        return path, ok
+    #     return arr
     
     def process_item(self, item, spider):
-        if isinstance(item, FundItem):
-            fund = item
-
-            article, ok = FdctspiderPipeline.__check_and_remove_whitespace(fund['article'])
-            if not ok:
-                return None
-            
-            fund['article'] = article
-            fund['title'] = fund['title'].strip() if fund['title'] is not None else ''
-            fund['lang'] = FdctspiderPipeline.__extract_lang(fund['url'])
-
-            return fund
-
-        elif isinstance(item, BulletinItem):
-            bulletin = item
-
-            article, ok = FdctspiderPipeline.__check_and_remove_whitespace(bulletin['article'])
-            if not ok:
-                return None
-                    
-            bulletin['article'] = article
-            bulletin['title'] = FdctspiderPipeline.__extract_title(bulletin['title'], article[0])
-            bulletin['lang'] = FdctspiderPipeline.__extract_lang(bulletin['url'])
-
-            return bulletin
+        article, ok = FdctspiderPipeline.__check_and_remove_whitespace(item['article'])
+        if not ok:
+            return None
         
-        elif isinstance(item, BulletinDetailItem):
-            detail = item
-            
-            article, ok = FdctspiderPipeline.__check_and_remove_whitespace(detail['article'])
-            if not ok:
-                return None
-            
-            detail['article'] = article 
-            detail['title'] = FdctspiderPipeline.__extract_title(detail['title'], article[0])
-            detail['lang'] = FdctspiderPipeline.__extract_lang(detail['url'])
+        item['article'] = article
+        item['title'] = FdctspiderPipeline.__extract_title(item['title'], article[0])
+        item['lang'] = FdctspiderPipeline.__extract_lang(item['url'])
 
-            return detail
-            
-
-        # elif isinstance(item, ImageItem):
-        #     images = item
-
-        #     # store in local directory
-        #     for p in images['path']:
-        #         download_path, ok = FdctspiderPipeline.__remove_wrong_path(p)
-        #         if not ok:
-        #             continue 
-                
-        #         download_path = self.__download_image_path(p)
-        #         urlretrieve(p, download_path)
-
-        #     return images
-        
-        # elif isinstance(item, DownloadItem):
-        #     download = item
-
-        #     # store in local directory
-        #     for p in download['path']:
-        #         download_path, ok = FdctspiderPipeline.__remove_wrong_path(p)
-        #         if not ok:
-        #             continue 
-                
-        #         download_path = self.__download_download_path(p)
-        #         urlretrieve(p, download_path)
-
-        #     return download
-        
-        # elif isinstance(item, FileItem):
-        #     file = item
-
-            # # store in local directory
-            # for p in file['path']:
-            #     file_path, ok = FdctspiderPipeline.__remove_wrong_path(p)
-            #     if not ok:
-            #         continue 
-                
-            #     file_path = self.__download_file_path(p)
-            #     urlretrieve(p, file_path)
-
-            # return file
+        return item
 
         # elif isinstance(item, QAAwardItem):
         #     qa = item 
@@ -256,45 +147,6 @@ class FdctspiderPipeline:
         #     qa['lang'] = FdctspiderPipeline.__extract_lang(qa['url']) 
 
         #     return qa
-        
-        elif isinstance(item, ContactItem):
-            contact = item
-
-            article, ok = FdctspiderPipeline.__check_and_remove_whitespace(contact['article'])
-            if not ok:
-                return None
-            
-            contact['lang'] = FdctspiderPipeline.__extract_lang(contact['url'])
-            contact['title'] = FdctspiderPipeline.__extract_title(contact['title'], article[0])
-            contact['article'] = article
-
-            return contact
-        
-        elif isinstance(item, TransItem):
-            trans = item 
-            
-            article, ok = FdctspiderPipeline.__check_and_remove_whitespace(trans['article'])
-            if not ok:
-                return None
-            
-            trans['lang'] = FdctspiderPipeline.__extract_lang(trans['url'])
-            trans['title'] = FdctspiderPipeline.__extract_title(trans['title'], article[0])
-            trans['article'] = article
-            
-            return trans
-        
-        elif isinstance(item, CoopItem):
-            coop = item
-            
-            article, ok = FdctspiderPipeline.__check_and_remove_whitespace(coop['article'])
-            if not ok:
-                return None
-            
-            coop['lang'] = FdctspiderPipeline.__extract_lang(coop['url'])
-            coop['title'] = FdctspiderPipeline.__extract_title(coop['title'], article[0])
-            coop['article'] = article
-            
-            return coop
         
 from scrapy.pipelines.images import ImagesPipeline
 from scrapy.pipelines.files import FilesPipeline
