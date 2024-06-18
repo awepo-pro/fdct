@@ -26,7 +26,7 @@ However, this process may take for a long time, don't close the terminal when lo
 python main.py --download
 ```
 
-# fetch Q&A
+<!-- # fetch Q&A
 there are Q&A in the webpage, so it formats in structure like one question with one answer. fetched data can be found in folder /fdctSpider/info/
 
 ```shell
@@ -34,4 +34,4 @@ python main.py --qa
 ```
 
 ## NOTE
-it is disable to reformat this [this website](https://www.fdct.gov.mo/zh_tw/research_funding1.html) into Q&A structure. Therefore, there is only 1 webpage suit for this format
+it is disable to reformat this [this website](https://www.fdct.gov.mo/zh_tw/research_funding1.html) into Q&A structure. Therefore, there is only 1 webpage suit for this format -->

@@ -11,7 +11,8 @@ BOT_NAME = "fdctSpider"
 
 SPIDER_MODULES = ["fdctSpider.spiders"]
 NEWSPIDER_MODULE = "fdctSpider.spiders"
-
+FILES_STORE = './download/'
+IMAGES_STORE = './images/'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "fdctSpider (+http://www.yourdomain.com)"
@@ -64,6 +65,11 @@ ROBOTSTXT_OBEY = True
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    "fdctSpider.pipelines.FdctspiderPipeline": 300,
+   # 'scrapy.pipelines.images.ImagesPipeline': 1,
+   # 'scrapy.pipelines.files.FilesPipeline': 1,
+   
+   "fdctSpider.pipelines.CustomImagePipelines": 1,
+   "fdctSpider.pipelines.CustomFilePipelines": 2,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
