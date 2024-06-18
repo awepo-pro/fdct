@@ -19,15 +19,15 @@ def main():
         println('it will take a long time, be patient......')
         println('start downloading all files')
         
-        os.system('scrapy crawl images.py 2>> log/files.txt')
+        os.system('scrapy crawl images 2>> log/files.txt')
         
         println('finish downloading all images')
         println('start downloading all other formats')
         
-        os.system('scrapy crawl download.py 2>> log/files.txt')
+        os.system('scrapy crawl download 2>> log/files.txt')
         println('finish 2/3, be patient')
         
-        os.system('scrapy crawl files.py 2>> log/files.txt')
+        os.system('scrapy crawl files 2>> log/files.txt')
         
     elif arg.info:
         output_paths = ['./info/fund.json', './info/bulletin.json', './info/bulletin_detail.json', './info/contact_us.json', './info/transformation_case.json',
