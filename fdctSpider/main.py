@@ -16,6 +16,7 @@ def check_file(dirs: list[str]) -> None:
 
 def main():
     if arg.download:
+        check_file(['log/'])
         println('it will take a long time, be patient......')
         println('start downloading all files')
         

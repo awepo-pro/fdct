@@ -11,6 +11,10 @@ pip install -r requirement.txt
 
 enter folder /fdctSpider/ and run the programming using the following commands
 
+```shell
+cd fdctSpider
+```
+
 # fetch information
 it fetches all the pages' information and stored in /fdctSpider/info/, there are several files to distinguish different structure of the webpages
 
